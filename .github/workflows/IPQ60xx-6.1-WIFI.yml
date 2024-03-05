@@ -92,7 +92,6 @@ jobs:
 
     - name: 更新 & 安装 feeds & 执行脚本
       run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF $OPENWRT_PATH/feeds.conf.default
         chmod +x $DIY_P1_SH
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P1_SH    
