@@ -10,6 +10,7 @@ env:
   REPO_BRANCH: main
   CONFIG_FILE: configs/new-wifi2.config
   DIY_SCRIPT: diy-script.sh
+  DIY_P1_SH: ./scripts/diy-part1.sh
   CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: true
@@ -88,6 +89,13 @@ jobs:
         ccache: false
         mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
         prefix: ${{ env.OPENWRT_PATH }}
+
+    - name: 更新 & 安装 feeds & 执行脚本
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF $OPENWRT_PATH/feeds.conf.default
+        chmod +x $DIY_P1_SH
+        cd $OPENWRT_PATH
+        $GITHUB_WORKSPACE/$DIY_P1_SH    
     
     - name: Install Feeds
       run: |
