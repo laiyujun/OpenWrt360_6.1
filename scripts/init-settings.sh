@@ -28,6 +28,8 @@ if [ -n "$WRT_PACKAGE" ]; then
 fi
 
 #高通平台锁定512M内存
+# 打开Bash的开关，忽略大小写
+shopt -s nocasematch
 if [[ $WRT_TARGET == *"IPQ"* ]]; then
   echo "高通平台锁定512M内存".
 	echo "CONFIG_IPQ_MEM_PROFILE_1024=n" >> ./.config
@@ -35,6 +37,8 @@ if [[ $WRT_TARGET == *"IPQ"* ]]; then
 	echo "CONFIG_ATH11K_MEM_PROFILE_1G=n" >> ./.config
 	echo "CONFIG_ATH11K_MEM_PROFILE_512M=y" >> ./.config
 fi
+# 关闭忽略大小写的比较
+shopt -u nocasematch
 
 echo "init settings end."
 #exit 0

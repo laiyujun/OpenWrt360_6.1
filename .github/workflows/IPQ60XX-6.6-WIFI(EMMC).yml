@@ -50,7 +50,7 @@ env:
   TZ: Asia/Shanghai
 
   #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  #WRT_TARGET: ${{inputs.WRT_TARGET}}
+  WRT_TARGET: ${{inputs.WRT_TARGET}}
   WRT_THEME: ${{inputs.WRT_THEME}}
   WRT_NAME: ${{inputs.WRT_NAME}}
   WRT_WIFI: ${{inputs.WRT_WIFI}}
