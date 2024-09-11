@@ -179,7 +179,7 @@ jobs:
 
       - name: Load Custom Packages
         run: |
-          cd ./$OPENWRT_PATH/package/
+          mkdir ./$OPENWRT_PATH/package && cd ./$OPENWRT_PATH/package/
           echo "Custom Packages Here."
 
           $GITHUB_WORKSPACE/Scripts/Packages.sh
