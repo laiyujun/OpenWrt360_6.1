@@ -1,21 +1,65 @@
-name: IPQ60XX-6.6-WIFI(EMMC)
+name: IPQ60XX-6.6-WIFI(EMMC)-CORE
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: 0 19 * * *
+  workflow_call:
+    inputs:
+      WRT_TARGET:
+        required: true
+        type: string
+      WRT_THEME:
+        required: true
+        type: string
+      WRT_NAME:
+        required: true
+        type: string
+      WRT_WIFI:
+        required: true
+        type: string
+      WRT_IP:
+        required: true
+        type: string
+      WRT_PW:
+        required: true
+        type: string
+      WRT_REPO:
+        required: true
+        type: string
+      WRT_BRANCH:
+        required: true
+        type: string
+      WRT_SOURCE:
+        required: false
+        type: string
+      WRT_PACKAGE:
+        required: false
+        type: string
+      WRT_TEST:
+        required: false
+        type: string
 
 env:
-  REPO_URL: https://github.com/LiBwrt-op/openwrt-6.x.git
-  REPO_BRANCH: main
+  REPO_URL: ${{inputs.WRT_REPO}}
+  REPO_BRANCH: ${{inputs.WRT_BRANCH || 'main'}}
   CONFIG_FILE: configs/ipq60xx-6.6-wifi(emmc).config
-  DIY_SCRIPT: diy-script.sh
-  CLASH_KERNEL: amd64
+  #DIY_SCRIPT: diy-script.sh
+  #CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: IPQ60XX-6.6-WIFI(EMMC)
+  FIRMWARE_TAG: IPQ60XX-6.6-WIFI(EMMC)-JDCLOUD
   TZ: Asia/Shanghai
+
+  #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #WRT_TARGET: ${{inputs.WRT_TARGET}}
+  WRT_THEME: ${{inputs.WRT_THEME}}
+  WRT_NAME: ${{inputs.WRT_NAME}}
+  WRT_WIFI: ${{inputs.WRT_WIFI}}
+  WRT_IP: ${{inputs.WRT_IP}}
+  WRT_PW: ${{inputs.WRT_PW}}
+  WRT_REPO: ${{inputs.WRT_REPO}}
+  WRT_BRANCH: ${{inputs.WRT_BRANCH}}
+  #WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
+  WRT_TEST: ${{inputs.WRT_TEST}}
 
 jobs:
   Build:
@@ -95,10 +139,21 @@ jobs:
           make defconfig > /dev/null 2>&1
           SOURCE_REPO="$(echo $REPO_URL | awk -F '/' '{print $(NF)}')"
           echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
-          DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
+          #DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
+          DEVICE_TARGET=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/$CONFIG_FILE)
           echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
           DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
           echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
+          
+          export WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
+          export WRT_CI=$(basename $GITHUB_WORKSPACE)
+          export WRT_VER=$(echo $WRT_REPO | cut -d '/' -f 5-)-$WRT_BRANCH
+          export WRT_TYPE=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/$CONFIG_FILE)
+
+          echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
+          echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
+          echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
+          echo "WRT_TYPE=$WRT_TYPE" >> $GITHUB_ENV
 
       - name: Cache Toolchain
         if: env.CACHE_TOOLCHAIN == 'true'
@@ -122,10 +177,26 @@ jobs:
           wget https://raw.githubusercontent.com/koksaver/OpenWrt360_6.1/main/0001-fix-upnp.patch
           git am 0001-fix-upnp.patch
 
+      - name: Load Custom Packages
+        run: |
+          cd ./$OPENWRT_PATH/package/
+          echo "Custom Packages Here."
+
+          $GITHUB_WORKSPACE/Scripts/Packages.sh
+          $GITHUB_WORKSPACE/Scripts/Handles.sh
+
       - name: Load Custom Configuration
         run: |
-          [ -e files ] && mv files $OPENWRT_PATH/files
-          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+          cd $OPENWRT_PATH
+          
+          rm -rf ./tmp* ./.config*
+          
+          cat $GITHUB_WORKSPACE/$CONFIG_FILE >> $OPENWRT_PATH/.config
+          
+          #[ -e files ] && mv files $OPENWRT_PATH/files
+          #[ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+          
+          $GITHUB_WORKSPACE/Scripts/Settings.sh
 
       - name: Download DL Package
         run: |
@@ -190,8 +261,10 @@ jobs:
             - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
             - ⚽ 固件源码: ${{ env.REPO_URL }}
             - 💝 源码分支: ${{ env.REPO_BRANCH }}
-            - 🌐 默认地址: 192.168.1.1
-            - 🔑 默认密码: password
+            - 💻 平台：${{env.WRT_TARGET}}
+            - 💻 设备：${{env.WRT_TYPE}}
+            - 🌐 默认地址: ${{env.WRT_IP}}
+            - 🔑 默认密码: ${{env.WRT_PW}}
             ### 🧊 固件版本
             - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
             - ${{ env.VERSION_INFO }}
