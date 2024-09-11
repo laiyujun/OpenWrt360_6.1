@@ -143,8 +143,7 @@ jobs:
           make defconfig > /dev/null 2>&1
           SOURCE_REPO="$(echo $REPO_URL | awk -F '/' '{print $(NF)}')"
           echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
-          #DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
-          DEVICE_TARGET=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/$CONFIG_FILE)
+          DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
           echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
           DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
           echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
@@ -195,21 +194,22 @@ jobs:
 
       - name: Load Custom Configuration
         run: |
-          cd $OPENWRT_PATH
+          cd ./openwrt/
           
           rm -rf ./tmp* ./.config*
           
-          cat $GITHUB_WORKSPACE/$CONFIG_FILE >> $OPENWRT_PATH/.config
+          cat $GITHUB_WORKSPACE/$CONFIG_FILE >> .config
           
           #[ -e files ] && mv files $OPENWRT_PATH/files
           #[ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
           
           $GITHUB_WORKSPACE/scripts/init-settings.sh
+          
+          make defconfig
 
       - name: Download DL Package
         run: |
           cd $OPENWRT_PATH
-          make defconfig
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
