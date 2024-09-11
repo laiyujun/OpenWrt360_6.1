@@ -183,11 +183,11 @@ jobs:
 
       - name: Load Custom Packages
         run: |
-          cd ./$OPENWRT_PATH/package/
+          cd $OPENWRT_PATH/package/
           echo "Custom Packages Here."
 
-          $GITHUB_WORKSPACE/Scripts/Packages.sh
-          $GITHUB_WORKSPACE/Scripts/Handles.sh
+          $GITHUB_WORKSPACE/scripts/Packages.sh
+          $GITHUB_WORKSPACE/scripts/Handles.sh
 
       - name: Load Custom Configuration
         run: |
@@ -200,7 +200,7 @@ jobs:
           #[ -e files ] && mv files $OPENWRT_PATH/files
           #[ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
           
-          $GITHUB_WORKSPACE/Scripts/Settings.sh
+          $GITHUB_WORKSPACE/scripts/init-settings.sh
 
       - name: Download DL Package
         run: |
