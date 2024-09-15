@@ -30,6 +30,9 @@ on:
       WRT_SOURCE:
         required: false
         type: string
+      WRT_PATCH:
+        required: false
+        type: string
       WRT_PACKAGE:
         required: false
         type: string
@@ -58,7 +61,8 @@ env:
   WRT_PW: ${{inputs.WRT_PW}}
   WRT_REPO: ${{inputs.WRT_REPO}}
   WRT_BRANCH: ${{inputs.WRT_BRANCH}}
-  #WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
+  WRT_PATCH: ${{inputs.WRT_PATCH}}
+  WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
 
 jobs:
@@ -178,6 +182,7 @@ jobs:
           ./scripts/feeds install -a
 
       - name: Apply patches
+        if: env.WRT_PATCH == 'true'
         run: |
           git config --global user.name "OpenWrt Builder"
           git config --global user.email "buster-openwrt@ovvo.uk"
