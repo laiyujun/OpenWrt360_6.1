@@ -41,7 +41,7 @@ UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
 #UPDATE_PACKAGE "luci-app-wolplus" "VIKINGYFY/luci-app-wolplus" "main"
 UPDATE_PACKAGE "luci-app-jd-dailybonus" "noiver/luci-app-jd-dailybonus" "master"
 #UPDATE_PACKAGE "luci-app-diskman" "shidahuilang/openwrt-package" "Immortalwrt" "pkg"
-UPDATE_PACKAGE "luci-app-linkease" "NueXini/NueXini_Packages" "main" "pkg"
+UPDATE_PACKAGE "linkease" "NueXini/NueXini_Packages" "main" "pkg"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
