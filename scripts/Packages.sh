@@ -45,7 +45,7 @@ UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
 #UPDATE_PACKAGE "linkease" "shidahuilang/openwrt-package" "Lede" "pkg"
 #UPDATE_PACKAGE "linkmount" "shidahuilang/openwrt-package" "Lede" "pkg"
 #UPDATE_PACKAGE "ffmpeg-remux" "shidahuilang/openwrt-package" "Lede" "pkg"
-UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
+#UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
