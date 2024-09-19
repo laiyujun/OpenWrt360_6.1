@@ -204,6 +204,8 @@ jobs:
       - name: Load Custom Configuration
         run: |
           cd $OPENWRT_PATH
+          # turboacc
+          curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
           
           rm -rf ./tmp* ./.config*
           
