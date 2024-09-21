@@ -47,9 +47,9 @@ UPDATE_PACKAGE "ddnsto" "kenzok8/openwrt-packages" "master" "pkg"
 #iStorex && dependency
 UPDATE_PACKAGE "istorex" "kenzok8/openwrt-packages" "master" "pkg"
 UPDATE_PACKAGE "quickstart" "kenzok8/openwrt-packages" "master" "pkg"
-UPDATE_PACKAGE "luci-app-store" "kenzok8/openwrt-packages" "master" "pkg"
-UPDATE_PACKAGE "taskd" "kenzok8/openwrt-packages" "master" "pkg"
-UPDATE_PACKAGE "luci-lib-xterm" "kenzok8/openwrt-packages" "master" "pkg"
+#UPDATE_PACKAGE "luci-app-store" "kenzok8/openwrt-packages" "master" "pkg"
+#UPDATE_PACKAGE "taskd" "kenzok8/openwrt-packages" "master" "pkg"
+#UPDATE_PACKAGE "luci-lib-xterm" "kenzok8/openwrt-packages" "master" "pkg"
 
 #UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
 
