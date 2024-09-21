@@ -43,15 +43,16 @@ UPDATE_PACKAGE "luci-app-easymesh" "takayukileung/luci-app-easymesh" "main"
 
 UPDATE_PACKAGE "adguardhome" "kenzok8/openwrt-packages" "master" "pkg"
 UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
-UPDATE_PACKAGE "ddnsto" "kenzok8/openwrt-packages" "master" "pkg"
+#linkease app
+UPDATE_PACKAGE "ddnsto" "linkease/nas-packages" "master" "pkg"
+UPDATE_PACKAGE "luci-app-ddnsto" "linkease/nas-packages-luci" "main" "pkg"
 #iStorex && dependency
-#UPDATE_PACKAGE "istorex" "kenzok8/openwrt-packages" "master" "pkg"
-#UPDATE_PACKAGE "quickstart" "kenzok8/openwrt-packages" "master" "pkg"
+UPDATE_PACKAGE "istoreenhance" "linkease/nas-packages" "master" "pkg"
+UPDATE_PACKAGE "luci-app-istoreenhance" "linkease/nas-packages-luci" "main" "pkg"
+UPDATE_PACKAGE "istorex" "linkease/nas-packages-luci" "main" "pkg"
+UPDATE_PACKAGE "quickstart" "linkease/nas-packages" "master" "pkg"
+UPDATE_PACKAGE "luci-app-quickstart" "linkease/nas-packages-luci" "main" "pkg"
 #UPDATE_PACKAGE "istoreenhance" "kiddin9/openwrt-packages" "master" "pkg"
-#UPDATE_PACKAGE "luci-app-store" "kenzok8/openwrt-packages" "master" "pkg"
-#UPDATE_PACKAGE "taskd" "kenzok8/openwrt-packages" "master" "pkg"
-#UPDATE_PACKAGE "luci-lib-xterm" "kenzok8/openwrt-packages" "master" "pkg"
-
 #UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
