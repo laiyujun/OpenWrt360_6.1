@@ -179,6 +179,7 @@ jobs:
           cd $OPENWRT_PATH
           
           sed -i '$a src-git istore https://github.com/linkease/istore;main' feeds.conf.default
+          sed -i '$a src-git nas-packages https://github.com/linkease/nas-packages;master' feeds.conf.default
           sed -i '$a src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' feeds.conf.default
           
           ./scripts/feeds update -a
