@@ -178,7 +178,8 @@ jobs:
         run: |
           cd $OPENWRT_PATH
           
-          sed -i '$a src-git qosmio_nss_packages https://github.com/qosmio/nss-packages.git' feeds.conf.default
+          sed -i '/nss_packages/ s/^/#/' feeds.conf.default
+          sed -i '$a src-git nss_packages https://github.com/qosmio/nss-packages.git' feeds.conf.default
           sed -i '$a src-git istore https://github.com/linkease/istore;main' feeds.conf.default
           
           ./scripts/feeds update -a
