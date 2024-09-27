@@ -52,7 +52,6 @@ UPDATE_PACKAGE "quickstart" "linkease/nas-packages" "master" "pkg"
 UPDATE_PACKAGE "luci-app-quickstart" "linkease/nas-packages-luci" "main" "pkg"
 #UPDATE_PACKAGE "istoreenhance" "linkease/nas-packages" "master" "pkg"
 #UPDATE_PACKAGE "luci-app-istoreenhance" "linkease/nas-packages-luci" "main" "pkg"
-#UPDATE_PACKAGE "istoreenhance" "kiddin9/openwrt-packages" "master" "pkg"
 #UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
