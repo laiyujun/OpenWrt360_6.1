@@ -74,7 +74,7 @@ jobs:
       #源码名称
       WRT_SOURCE: ${{inputs.SOURCE || matrix.SOURCE}}
       #patch开关
-      WRT_PATCH: ${{inputs.PATCH}}
+      WRT_PATCH: ${{inputs.PATCH || 'true'}}
       #插件调整
       WRT_PACKAGE: ${{inputs.PACKAGE}}
       #仅输出配置文件
