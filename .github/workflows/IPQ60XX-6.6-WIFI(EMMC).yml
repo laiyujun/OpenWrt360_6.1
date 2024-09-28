@@ -264,20 +264,18 @@ jobs:
           tar -zcPf Packages.tar.gz $OPENWRT_PATH/bin/targets/*/*/packages
           rm -rf $OPENWRT_PATH/bin/targets/*/*/packages
 
-          if [[ $WRT_TEST != '是' ]]; then
-            #find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
+          #find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
 
-            for TYPE in $WRT_TYPE ; do
-              for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
-                EXT=$(basename $FILE | cut -d '.' -f 2-)
-                NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
-                NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"."$EXT"
-                mv -f $FILE ./upload/$NEW_FILE
-              done
+          for TYPE in $WRT_TYPE ; do
+            for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
+              EXT=$(basename $FILE | cut -d '.' -f 2-)
+              NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
+              NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"."$EXT"
+              mv -f $FILE ./upload/$NEW_FILE
             done
+          done
 
-            find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
-          fi
+          find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
 
       - name: Upload Firmware To Release
         if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
