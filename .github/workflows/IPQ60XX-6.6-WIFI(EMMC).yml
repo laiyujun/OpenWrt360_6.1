@@ -253,8 +253,19 @@ jobs:
           name: ${{ env.SOURCE_REPO }}-bin-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
           path: ${{ env.OPENWRT_PATH }}/bin
 
-      - name: Package Firmware
+      - name: Organize Files
         if: steps.compile.outputs.status == 'success'
+        run: |
+          cd $OPENWRT_PATH/bin/targets/*/*
+          cat sha256sums
+          cp $OPENWRT_PATH/.config build.config
+          mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
+          tar -zcf Packages.tar.gz packages
+          rm -rf packages feeds.buildinfo version.buildinfo
+          echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
+
+      - name: Package Firmware
+        if: steps.compile.outputs.status == 'success' && env.WRT_TEST == 'true'
         run: |
           cd $OPENWRT_PATH && mkdir ./upload/
           
@@ -285,7 +296,8 @@ jobs:
           allowUpdates: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: ${{ env.OPENWRT_PATH }}/upload/*
+          #artifacts: ${{ env.OPENWRT_PATH }}/upload/*
+          artifacts: ${{ env.FIRMWARE_PATH }}/*
           body: |
             **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
             ### 📒 固件信息
