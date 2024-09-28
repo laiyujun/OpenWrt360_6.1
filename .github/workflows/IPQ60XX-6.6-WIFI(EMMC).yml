@@ -261,7 +261,7 @@ jobs:
           cat $OPENWRT_PATH/bin/targets/*/*/sha256sums
           cp -f $OPENWRT_PATH/.config ./upload/Config_"$WRT_TARGET"_"$WRT_VER"_"$WRT_DATE".txt
           mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk $OPENWRT_PATH/bin/targets/*/*/packages
-          tar -zcf Packages.tar.gz $OPENWRT_PATH/bin/targets/*/*/packages
+          tar -zcPf Packages.tar.gz $OPENWRT_PATH/bin/targets/*/*/packages
           rm -rf $OPENWRT_PATH/bin/targets/*/*/packages
 
           if [[ $WRT_TEST != '是' ]]; then
