@@ -34,8 +34,9 @@ on:
       PATCH:
         description: '打patch开关'
         required: true
-        default: true
-        type: boolean
+        default: '是'
+        type: choice
+        options: [是, 否]
       TEST:
         description: '仅输出配置文件，不编译固件。'
         default: false
@@ -77,7 +78,7 @@ jobs:
       #源码名称
       WRT_SOURCE: ${{inputs.SOURCE || matrix.SOURCE}}
       #patch开关
-      WRT_PATCH: ${{inputs.PATCH || 'true'}}
+      WRT_PATCH: ${{inputs.PATCH || '是'}}
       #插件调整
       WRT_PACKAGE: ${{inputs.PACKAGE}}
       #仅输出配置文件
