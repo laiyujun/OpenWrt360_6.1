@@ -39,9 +39,10 @@ on:
         options: [是, 否]
       TEST:
         description: '仅输出配置文件，不编译固件。'
-        default: false
-        required: true
-        type: boolean
+        default: '否'
+        required: false
+        type: choice
+        options: [是, 否]
 
 #CI权限
 permissions: write-all
