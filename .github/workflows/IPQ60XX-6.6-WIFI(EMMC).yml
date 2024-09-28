@@ -186,7 +186,7 @@ jobs:
           ./scripts/feeds install -a
 
       - name: Apply patches
-        if: env.WRT_PATCH == 'true'
+        if: env.WRT_PATCH
         run: |
           git config --global user.name "OpenWrt Builder"
           git config --global user.email "buster-openwrt@ovvo.uk"
@@ -242,23 +242,31 @@ jobs:
           name: ${{ env.SOURCE_REPO }}-bin-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
           path: ${{ env.OPENWRT_PATH }}/bin
 
-      - name: Organize Files
+      - name: Package Firmware
         if: steps.compile.outputs.status == 'success'
         run: |
-          cd $OPENWRT_PATH/bin/targets/*/*
-          cat sha256sums
-          cp $OPENWRT_PATH/.config build.config
-          mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk packages
-          tar -zcf Packages.tar.gz packages
-          rm -rf packages feeds.buildinfo version.buildinfo
-          echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
+          cd $OPENWRT_PATH && mkdir ./upload/
+          
+          cat $OPENWRT_PATH/bin/targets/*/*/sha256sums
+          cp -f $OPENWRT_PATH/.config ./upload/Config_"$WRT_TARGET"_"$WRT_VER"_"$WRT_DATE".txt
+          mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk $OPENWRT_PATH/bin/targets/*/*/packages
+          tar -zcf Packages.tar.gz $OPENWRT_PATH/bin/targets/*/*/packages
+          rm -rf $OPENWRT_PATH/bin/targets/*/*/packages
 
-      - name: Upload Firmware To Artifact
-        if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ env.SOURCE_REPO }}-firmware-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
-          path: ${{ env.FIRMWARE_PATH }}
+          if [[ $WRT_TEST != 'true' ]]; then
+            #find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
+
+            for TYPE in $WRT_TYPE ; do
+              for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
+                EXT=$(basename $FILE | cut -d '.' -f 2-)
+                NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
+                NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"."$EXT"
+                mv -f $FILE ./upload/$NEW_FILE
+              done
+            done
+
+            find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
+          fi
 
       - name: Upload Firmware To Release
         if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
@@ -268,7 +276,7 @@ jobs:
           allowUpdates: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: ${{ env.FIRMWARE_PATH }}/*
+          artifacts: ${{ env.OPENWRT_PATH }}/upload/*
           body: |
             **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
             ### 📒 固件信息
