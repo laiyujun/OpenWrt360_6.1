@@ -33,6 +33,9 @@ on:
       WRT_PATCH:
         required: true
         type: string
+      WRT_COMMIT:
+        required: false
+        type: string
       WRT_PACKAGE:
         required: false
         type: string
@@ -62,6 +65,7 @@ env:
   WRT_REPO: ${{inputs.WRT_REPO}}
   WRT_BRANCH: ${{inputs.WRT_BRANCH}}
   WRT_PATCH: ${{inputs.WRT_PATCH}}
+  WRT_COMMIT: ${{inputs.WRT_COMMIT}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
 
@@ -137,6 +141,11 @@ jobs:
           df -hT $GITHUB_WORKSPACE
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           cd openwrt
+          ## 临时回滚到一个正常版本编译，修复后删除
+          if [ -n "$WRT_COMMIT" ]; then
+            echo "手动回滚 $REPO_URL 到 commit $WRT_COMMIT".
+            git reset --hard $WRT_COMMIT
+          fi
           echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
           VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
           echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
