@@ -38,7 +38,7 @@ on:
       PATCH:
         description: '打patch开关'
         required: true
-        default: '是'
+        default: '否'
         type: choice
         options: [是, 否]
       TEST:
