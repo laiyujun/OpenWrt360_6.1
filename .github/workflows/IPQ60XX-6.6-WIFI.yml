@@ -102,7 +102,7 @@ jobs:
         git config --global user.email "buster-openwrt@ovvo.uk"
         cd $OPENWRT_PATH
         wget https://raw.githubusercontent.com/koksaver/OpenWrt360_6.1/main/0001-fix-upnp.patch
-        git am 0001-fix-upnp.patch
+        # git am 0001-fix-upnp.patch
   
     - name: Load Custom Configuration
       run: |

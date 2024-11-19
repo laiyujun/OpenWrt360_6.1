@@ -265,7 +265,7 @@ jobs:
           rm -rf $OPENWRT_PATH/bin/targets/*/*/packages
 
           if [[ $WRT_TEST != '是' ]]; then
-            #find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
+            find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
   
             for TYPE in $WRT_TYPE ; do
               for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
