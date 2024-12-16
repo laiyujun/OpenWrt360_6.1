@@ -285,6 +285,7 @@ jobs:
         with:
           name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
           allowUpdates: true
+          removeArtifacts: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.OPENWRT_PATH }}/upload/*
