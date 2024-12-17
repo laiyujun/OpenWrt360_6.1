@@ -191,7 +191,7 @@ jobs:
           #sed -i '/nss_packages/ s/^/#/' feeds.conf.default
           #sed -i '$a src-git nss_packages https://github.com/qosmio/nss-packages.git' feeds.conf.default
           #sed -i '$a src-git sqm_scripts_nss https://github.com/qosmio/sqm-scripts-nss.git' feeds.conf.default
-          sed -i '$a src-git lede_packages https://github.com/coolsnowwolf/packages.git;openwrt-23.05' feeds.conf.default
+          #sed -i '$a src-git lede_packages https://github.com/coolsnowwolf/packages.git' feeds.conf.default
           sed -i '$a src-git lede_luci https://github.com/coolsnowwolf/luci.git;openwrt-23.05' feeds.conf.default
           sed -i '$a src-git iStore https://github.com/linkease/istore;main' feeds.conf.default
           
