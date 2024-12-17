@@ -40,7 +40,6 @@ UPDATE_PACKAGE "passwall2" "xiaorouji/openwrt-passwall2" "main" "pkg"
 UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
 #UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 #UPDATE_PACKAGE "luci-app-wolplus" "VIKINGYFY/luci-app-wolplus" "main"
-#UPDATE_PACKAGE "luci-app-jd-dailybonus" "noiver/luci-app-jd-dailybonus" "master"
 
 UPDATE_PACKAGE "adguardhome" "kenzok8/openwrt-packages" "master" "pkg"
 UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
@@ -53,9 +52,6 @@ UPDATE_PACKAGE "quickstart" "linkease/nas-packages" "master" "pkg"
 UPDATE_PACKAGE "luci-app-quickstart" "linkease/nas-packages-luci" "main" "pkg"
 #UPDATE_PACKAGE "istoreenhance" "linkease/nas-packages" "master" "pkg"
 #UPDATE_PACKAGE "luci-app-istoreenhance" "linkease/nas-packages-luci" "main" "pkg"
-#UPDATE_PACKAGE "qbittorrent" "NueXini/NueXini_Packages" "main" "pkg"
-UPDATE_PACKAGE "turboacc" "chenmozhijin/turboacc" "package"
-UPDATE_PACKAGE "luci-app-turboacc" "chenmozhijin/turboacc" "luci"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
