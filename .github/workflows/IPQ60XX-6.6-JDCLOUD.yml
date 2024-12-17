@@ -3,9 +3,9 @@ name: IPQ60XX-6.6-JDCLOUD
 
 #CI计划
 on:
-  #自动编译：每天早上4点
+  #自动编译：每个星期五早上4点
   schedule:
-    - cron: 0 20 * * *
+    - cron: 0 16 * * 5
   #推送代码编译
   push:
   workflow_dispatch:
