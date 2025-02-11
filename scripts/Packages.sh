@@ -54,7 +54,7 @@ UPDATE_PACKAGE "luci-app-quickstart" "linkease/nas-packages-luci" "main" "pkg"
 #UPDATE_PACKAGE "luci-app-istoreenhance" "linkease/nas-packages-luci" "main" "pkg"
 
 #luci-app-turboacc
-UPDATE_PACKAGE "luci-app-turboacc" "whengrun/luci-app-turboacc" "main"
+UPDATE_PACKAGE "luci-app-turboacc" "coolsnowwolf/luci" "master" "pkg"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
