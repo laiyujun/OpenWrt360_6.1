@@ -41,7 +41,8 @@ UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
 #UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 #UPDATE_PACKAGE "luci-app-wolplus" "VIKINGYFY/luci-app-wolplus" "main"
 
-UPDATE_PACKAGE "adguardhome" "kenzok8/openwrt-packages" "master" "pkg"
+UPDATE_PACKAGE "luci-app-adguardhome" "xiaoxiao29/luci-app-adguardhome" "master"
+#UPDATE_PACKAGE "adguardhome" "haiibo/openwrt-packages" "master" "pkg"
 UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
 #linkease app
 UPDATE_PACKAGE "ddnsto" "linkease/nas-packages" "master" "pkg"
