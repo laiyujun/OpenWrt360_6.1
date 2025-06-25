@@ -222,8 +222,16 @@ jobs:
           cat $GITHUB_WORKSPACE/$CONFIG_FILE >> .config
           
           $GITHUB_WORKSPACE/scripts/init-settings.sh
-          
-          make defconfig
+
+      - name: Configure opkg
+        run: |
+          cd $OPENWRT_PATH
+          echo "CONFIG_PACKAGE_opkg=y" >> .config                # 启用 opkg 主程序
+          echo "CONFIG_PACKAGE_opkg-boot=y" >> .config
+          echo "CONFIG_BUSYBOX_CONFIG_FEATURE_IPK=y" >> .config  # 使 BusyBox 支持 opkg 格式
+          echo "CONFIG_PACKAGE_libustream-openssl=y" >> .config  # 启用 HTTPS
+          echo "CONFIG_PACKAGE_ca-bundle=y" >> .config           # 添加 CA 证书（安全连接必备）
+          make defconfig  # 应用配置
 
       - name: Download DL Package
         run: |
