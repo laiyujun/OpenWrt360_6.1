@@ -61,6 +61,7 @@ jobs:
       matrix:
         TARGET: [ ipq60xx-6.6-wifi(emmc) ]
         SOURCE: [ LiBwrt-op/openwrt-6.x ]
+        BRANCH: [ k6.12-nss ]
     #调用公用编译核心XX-CORE.yml
     uses: ./.github/workflows/IPQ60XX-6.6-WIFI(EMMC).yml
     with:
@@ -79,7 +80,7 @@ jobs:
       #源码链接
       WRT_REPO: https://github.com/${{inputs.SOURCE || matrix.SOURCE}}.git
       #源码分支
-      WRT_BRANCH: ${{inputs.BRANCH || 'openwrt-24.10'}}
+      WRT_BRANCH: ${{inputs.BRANCH || matrix.BRANCH}}
       #源码名称
       WRT_SOURCE: ${{inputs.SOURCE || matrix.SOURCE}}
       #patch开关
