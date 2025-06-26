@@ -149,6 +149,8 @@ jobs:
           echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
           VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
           echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
+          VERSION_KERNEL=$(grep -oP 'LINUX_KERNEL_HASH-\K[0-9]+\.[0-9]+\.[0-9]+' target/linux/generic/kernel-6.12)
+          echo "VERSION_KERNEL=$VERSION_KERNEL" >> $GITHUB_ENV
 
       - name: Generate Variables
         run: |
@@ -251,46 +253,28 @@ jobs:
           name: ${{ env.SOURCE_REPO }}-bin-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
           path: ${{ env.OPENWRT_PATH }}/bin
 
-      - name: Package Firmware
+      - name: Organize Files
         if: steps.compile.outputs.status == 'success'
         run: |
-          cd $OPENWRT_PATH && mkdir ./upload/
-          
-          echo '## print ls -l workdir ##'
-          ls -l $OPENWRT_PATH
-          
-          echo '## print ls -l bin ##'
-          ls -l $OPENWRT_PATH/bin/
-          
-          echo '## print ls -l targets ##'
-          ls -l $OPENWRT_PATH/bin/targets/
-          
-          echo '## print ls -l targets/*/ ##'
-          ls -l $OPENWRT_PATH/bin/targets/*/
-          
-          echo '## print ls -l targets/*/*/ ##'
-          ls -l $OPENWRT_PATH/bin/targets/*/*/
-          
-          cat $OPENWRT_PATH/bin/targets/*/*/sha256sums
-          cp -f $OPENWRT_PATH/.config ./upload/Config_"$WRT_TARGET"_"$WRT_VER"_"$WRT_DATE".txt
-          #mv -f $OPENWRT_PATH/bin/packages/*/*/*.ipk $OPENWRT_PATH/bin/targets/*/*/packages
-          #tar -zcPf Packages.tar.gz $OPENWRT_PATH/bin/targets/*/*/packages
-          #rm -rf $OPENWRT_PATH/bin/targets/*/*/packages
+          df -hT
+          echo "==============================="
+          ls $OPENWRT_PATH/bin/targets/*/*
+          echo "==============================="
+          cd $OPENWRT_PATH/bin/targets/*/*
+          cat config.buildinfo
+          cat sha256sums
+          cp $OPENWRT_PATH/.config build.config
+          mv -f $OPENWRT_PATH/bin/packages/*/*/* packages
+          tar -zcf Packages.tar.gz packages
+          rm -rf packages feeds.buildinfo version.buildinfo
+          echo "FIRMWARE_PATH=$PWD" >> $GITHUB_ENV
 
-          if [[ $WRT_TEST != '是' ]]; then
-            find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
-  
-            for TYPE in $WRT_TYPE ; do
-              for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
-                EXT=$(basename $FILE | cut -d '.' -f 2-)
-                NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
-                NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"."$EXT"
-                mv -f $FILE ./upload/$NEW_FILE
-              done
-            done
-          
-            find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
-          fi
+      - name: Upload Firmware To Artifact(将固件上传到Artifact)
+        if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE != 'true'
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ env.SOURCE_REPO }}-firmware-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.FILE_DATE }}
+          path: ${{ env.FIRMWARE_PATH }}
 
       - name: Upload Firmware To Release
         if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
@@ -301,11 +285,11 @@ jobs:
           removeArtifacts: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: ${{ env.OPENWRT_PATH }}/upload/*
+          artifacts: ${{ env.FIRMWARE_PATH }}/*
           body: |
             **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
             ### 📒 固件信息
-            - 这是带WIFI以及NSS且适用于EMMC的6.6内核固件
+            - 这是带WIFI以及NSS且适用于EMMC的6.12内核固件
             - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
             - ⚽ 固件源码: ${{ env.REPO_URL }}
             - 💝 源码分支: ${{ env.REPO_BRANCH }}
@@ -314,5 +298,6 @@ jobs:
             - 🌐 默认地址: ${{env.WRT_IP}}
             - 🔑 默认密码: ${{env.WRT_PW}}
             ### 🧊 固件版本
+            - 固件内核版本：${{ env.VERSION_KERNEL }}
             - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
             - ${{ env.VERSION_INFO }}
