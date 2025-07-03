@@ -15,13 +15,13 @@ on:
         required: true
         type: choice
         description: 'config filename'
-        options: [ ipq60xx-6.6-wifi(emmc)]
+        options: [ 'ipq60xx-6.6-wifi(emmc)', 'x86-64' ]
       SOURCE:
         default: 'LiBwrt-op/openwrt-6.x'
         required: true
         type: choice
         description: 'repo source name'
-        options: [ VIKINGYFY/immortalwrt, immortalwrt/immortalwrt, King-Of-Knights/openwrt-6.x, LiBwrt-op/openwrt-6.x]
+        options: [ 'VIKINGYFY/immortalwrt', 'immortalwrt/immortalwrt', 'King-Of-Knights/openwrt-6.x', 'LiBwrt-op/openwrt-6.x']
       BRANCH:
         default: 'main'
         required: true

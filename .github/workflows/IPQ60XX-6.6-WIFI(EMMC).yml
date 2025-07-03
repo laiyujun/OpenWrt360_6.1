@@ -46,13 +46,13 @@ on:
 env:
   REPO_URL: ${{inputs.WRT_REPO}}
   REPO_BRANCH: ${{inputs.WRT_BRANCH || 'main'}}
-  CONFIG_FILE: configs/ipq60xx-6.6-wifi(emmc).config
+  CONFIG_FILE: configs/${{inputs.WRT_TARGET}}.config
   #DIY_SCRIPT: diy-script.sh
   #CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: IPQ60XX-6.6-WIFI(EMMC)-JDCLOUD
+  FIRMWARE_TAG: ${{inputs.WRT_TARGET}}
   TZ: Asia/Shanghai
 
   #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
