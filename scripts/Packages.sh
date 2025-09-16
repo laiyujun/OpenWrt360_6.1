@@ -58,8 +58,8 @@ UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
 #luci-app-turboacc
 #UPDATE_PACKAGE "luci-app-turboacc" "coolsnowwolf/luci" "master" "pkg"
 
-#luci-app-oaf
-UPDATE_PACKAGE "luci-app-oaf" "destan19/OpenAppFilter" "master"
+#luci-app-oaf (destan19)
+UPDATE_PACKAGE "luci-app-oaf" "laiyujun/OpenAppFilter" "master"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
