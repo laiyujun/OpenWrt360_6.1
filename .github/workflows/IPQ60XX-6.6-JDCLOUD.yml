@@ -23,7 +23,7 @@ on:
         description: 'repo source name'
         options: [ 'VIKINGYFY/immortalwrt', 'immortalwrt/immortalwrt', 'King-Of-Knights/openwrt-6.x', 'LiBwrt-op/openwrt-6.x']
       BRANCH:
-        default: 'main'
+        default: 'k6.12-nss'
         required: true
         description: 'branch name'
         type: string
