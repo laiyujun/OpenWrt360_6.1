@@ -146,9 +146,6 @@ jobs:
             echo "手动回滚 $REPO_URL 到 commit $WRT_COMMIT".
             git reset --hard $WRT_COMMIT
           fi
-          sed -i '$a CONFIG_WERROR=n' target/linux/qualcommax/config-6.12
-          sed -i '$a CONFIG_WARNINGS=n' target/linux/qualcommax/config-6.12
-          cat target/linux/qualcommax/config-6.12
           echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
           VERSION_INFO=$(git show -s --date=short --format="作者: %an<br/>时间: %cd<br/>内容: %s<br/>hash: %H")
           echo "VERSION_INFO=$VERSION_INFO" >> $GITHUB_ENV
