@@ -106,4 +106,4 @@ UPDATE_VERSION() {
 
 # 删除重复包,修复编译问题
 rm -rf feeds/luci/applications/luci-app-appfilter
-
+rm -rf feeds/packages/open-app-filter
