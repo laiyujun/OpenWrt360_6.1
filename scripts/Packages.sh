@@ -103,3 +103,7 @@ UPDATE_VERSION() {
 #UPDATE_VERSION "软件包名" "测试版，true，可选，默认为否"
 #UPDATE_VERSION "sing-box" "true"
 #UPDATE_VERSION "tailscale"
+
+# 删除重复包,修复编译问题
+rm -rf feeds/luci/applications/luci-app-appfilter
+
