@@ -11,11 +11,11 @@ on:
   workflow_dispatch:
     inputs:
       TARGET:
-        default: 'ipq60xx-6.6-wifi(emmc)'
+        default: 'Arthur&Athena&Taiyi'
         required: true
         type: choice
         description: 'config filename'
-        options: [ 'ipq60xx-6.6-wifi(emmc)', 'x86-64' ]
+        options: [ 'Arthur&Athena&Taiyi', 'IPQ60XX', 'x86-64' ]
       SOURCE:
         default: 'LiBwrt-op/openwrt-6.x'
         required: true
@@ -59,11 +59,11 @@ jobs:
       fail-fast: false
       #max-parallel: 3
       matrix:
-        TARGET: [ ipq60xx-6.6-wifi(emmc) ]
+        TARGET: [ Arthur&Athena&Taiyi ]
         SOURCE: [ LiBwrt-op/openwrt-6.x ]
         BRANCH: [ k6.12-nss ]
     #调用公用编译核心XX-CORE.yml
-    uses: ./.github/workflows/IPQ60XX-6.6-WIFI(EMMC).yml
+    uses: ./.github/workflows/IPQ60XX-6.12-WIFI(EMMC).yml
     with:
       #编译平台
       WRT_TARGET: ${{inputs.TARGET || matrix.TARGET}}
