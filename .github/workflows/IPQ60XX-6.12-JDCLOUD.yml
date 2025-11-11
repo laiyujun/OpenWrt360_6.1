@@ -21,12 +21,16 @@ on:
         required: true
         type: choice
         description: 'repo source name'
-        options: [ 'VIKINGYFY/immortalwrt', 'immortalwrt/immortalwrt', 'King-Of-Knights/openwrt-6.x', 'LiBwrt-op/openwrt-6.x']
+        options: [ 'LiBwrt-op/openwrt-6.x', 'laipeng668/openwrt-6.x', 'laipeng668/immortalwrt', 'immortalwrt/immortalwrt' ]
       BRANCH:
         default: 'k6.12-nss'
         required: true
         description: 'branch name'
-        type: string
+        type: choice
+        options:
+          - master
+          - main
+          - k6.12-nss
       COMMIT:
         required: false
         description: '可编译代码commit id'
