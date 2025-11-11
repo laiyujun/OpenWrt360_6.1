@@ -15,30 +15,11 @@ sed -i "s/192\.168\.[0-9]*\.[0-9]*/$WRT_IP/g" $CFG_FILE
 #修改默认主机名
 sed -i "s/hostname='.*'/hostname='$WRT_NAME'/g" $CFG_FILE
 
-#配置文件修改
-echo "CONFIG_PACKAGE_luci=y" >> ./.config
-echo "CONFIG_LUCI_LANG_zh_Hans=y" >> ./.config
-echo "CONFIG_PACKAGE_luci-theme-$WRT_THEME=y" >> ./.config
-echo "CONFIG_PACKAGE_luci-app-$WRT_THEME-config=y" >> ./.config
-
 #手动调整的插件
 if [ -n "$WRT_PACKAGE" ]; then
   echo "手动调整的插件$WRT_PACKAGE".
 	echo "CONFIG_PACKAGE_$WRT_PACKAGE=y" >> ./.config
 fi
-
-#高通平台锁定512M内存
-# 打开Bash的开关，忽略大小写
-shopt -s nocasematch
-if [[ $WRT_TARGET == *"IPQ"* ]]; then
-  echo "高通平台锁定512M内存".
-	echo "CONFIG_IPQ_MEM_PROFILE_1024=n" >> ./.config
-	echo "CONFIG_IPQ_MEM_PROFILE_512=y" >> ./.config
-	echo "CONFIG_ATH11K_MEM_PROFILE_1G=n" >> ./.config
-	echo "CONFIG_ATH11K_MEM_PROFILE_512M=y" >> ./.config
-fi
-# 关闭忽略大小写的比较
-shopt -u nocasematch
 
 echo "init settings end."
 #exit 0

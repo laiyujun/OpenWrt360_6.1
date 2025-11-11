@@ -20,30 +20,34 @@ UPDATE_PACKAGE() {
 	fi
 }
 
+# 移除要替换的包
+rm -rf feeds/luci/applications/luci-app-wechatpush
+rm -rf feeds/luci/applications/luci-app-appfilter
+rm -rf feeds/luci/applications/luci-app-frpc
+rm -rf feeds/luci/applications/luci-app-frps
+rm -rf feeds/packages/open-app-filter
+rm -rf feeds/packages/net/open-app-filter
+rm -rf feeds/packages/net/adguardhome
+rm -rf feeds/packages/net/ariang
+rm -rf feeds/packages/net/frp
+rm -rf feeds/packages/lang/golang
+
 #UPDATE_PACKAGE "包名" "项目地址" "项目分支" "pkg/name，可选，pkg为从大杂烩中单独提取包名插件；name为重命名为包名"
 UPDATE_PACKAGE "argon" "jerrykuku/luci-theme-argon" "master"
 UPDATE_PACKAGE "argon-config" "jerrykuku/luci-app-argon-config" "master"
-UPDATE_PACKAGE "design" "kenzok78/luci-theme-design" "js"
-UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "js"
 UPDATE_PACKAGE "alpha" "derisamedia/luci-theme-alpha" "master"
 UPDATE_PACKAGE "alpha-config" "animegasan/luci-app-alpha-config" "master"
 
 #UPDATE_PACKAGE "homeproxy" "VIKINGYFY/homeproxy" "main"
-##UPDATE_PACKAGE "mihomo" "morytyann/OpenWrt-mihomo" "main"
-##UPDATE_PACKAGE "nekoclash" "Thaolga/luci-app-nekoclash" "main"
 #UPDATE_PACKAGE "openclash" "vernesong/OpenClash" "dev" "pkg"
-UPDATE_PACKAGE "passwall-packages" "xiaorouji/openwrt-passwall-packages" "main"
-UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
-UPDATE_PACKAGE "passwall2" "xiaorouji/openwrt-passwall2" "main" "pkg"
+#UPDATE_PACKAGE "passwall-packages" "xiaorouji/openwrt-passwall-packages" "main"
+#UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
+#UPDATE_PACKAGE "passwall2" "xiaorouji/openwrt-passwall2" "main" "pkg"
 ##UPDATE_PACKAGE "ssr-plus" "fw876/helloworld" "master"
 
-#UPDATE_PACKAGE "luci-app-advancedplus" "VIKINGYFY/luci-app-advancedplus" "main"
 UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
-#UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
-#UPDATE_PACKAGE "luci-app-wolplus" "VIKINGYFY/luci-app-wolplus" "main"
 
 UPDATE_PACKAGE "luci-app-adguardhome" "xiaoxiao29/luci-app-adguardhome" "master"
-#UPDATE_PACKAGE "adguardhome" "haiibo/openwrt-packages" "master" "pkg"
 UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
 #linkease app
 #UPDATE_PACKAGE "ddnsto" "linkease/nas-packages" "master" "pkg"
@@ -55,15 +59,28 @@ UPDATE_PACKAGE "easymesh" "kenzok8/openwrt-packages" "master" "pkg"
 #UPDATE_PACKAGE "istoreenhance" "linkease/nas-packages" "master" "pkg"
 #UPDATE_PACKAGE "luci-app-istoreenhance" "linkease/nas-packages-luci" "main" "pkg"
 
-#luci-app-turboacc
-#UPDATE_PACKAGE "luci-app-turboacc" "coolsnowwolf/luci" "master" "pkg"
-
 #luci-app-oaf (destan19)
 UPDATE_PACKAGE "luci-app-oaf" "destan19/OpenAppFilter" "master"
 
 if [[ $WRT_REPO == *"openwrt-6.x"* ]]; then
-	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
+#	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
+  echo "This is the openwrt-6.x repos."
 fi
+
+# Git稀疏克隆，只克隆指定目录到本地
+function git_sparse_clone() {
+  branch="$1" repourl="$2" && shift 2
+  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
+  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+  cd $repodir && git sparse-checkout set $@
+  mv -f $@ ../package
+  cd .. && rm -rf $repodir
+}
+git clone --depth=1 https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+git clone --depth=1 https://github.com/sbwml/luci-app-openlist2 package/openlist
+git_sparse_clone ariang https://github.com/laipeng668/packages net/ariang
+git clone --depth=1 https://github.com/NONGFAH/luci-app-athena-led package/luci-app-athena-led
+chmod +x package/luci-app-athena-led/root/etc/init.d/athena_led package/luci-app-athena-led/root/usr/sbin/athena-led
 
 #更新软件包版本
 UPDATE_VERSION() {
@@ -103,7 +120,3 @@ UPDATE_VERSION() {
 #UPDATE_VERSION "软件包名" "测试版，true，可选，默认为否"
 #UPDATE_VERSION "sing-box" "true"
 #UPDATE_VERSION "tailscale"
-
-# 删除重复包,修复编译问题
-rm -rf feeds/luci/applications/luci-app-appfilter
-rm -rf feeds/packages/open-app-filter
