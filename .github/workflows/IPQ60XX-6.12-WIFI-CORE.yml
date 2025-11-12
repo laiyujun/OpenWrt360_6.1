@@ -1,24 +1,9 @@
-name: IPQ60XX-6.6-WIFI(EMMC)-CORE
+name: IPQ60XX-6.12-WIFI-CORE
 
 on:
   workflow_call:
     inputs:
       WRT_TARGET:
-        required: true
-        type: string
-      WRT_THEME:
-        required: true
-        type: string
-      WRT_NAME:
-        required: true
-        type: string
-      WRT_WIFI:
-        required: true
-        type: string
-      WRT_IP:
-        required: true
-        type: string
-      WRT_PW:
         required: true
         type: string
       WRT_REPO:
@@ -57,12 +42,6 @@ env:
   TZ: Asia/Shanghai
 
   #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  WRT_TARGET: ${{inputs.WRT_TARGET}}
-  WRT_THEME: ${{inputs.WRT_THEME}}
-  WRT_NAME: ${{inputs.WRT_NAME}}
-  WRT_WIFI: ${{inputs.WRT_WIFI}}
-  WRT_IP: ${{inputs.WRT_IP}}
-  WRT_PW: ${{inputs.WRT_PW}}
   WRT_REPO: ${{inputs.WRT_REPO}}
   WRT_BRANCH: ${{inputs.WRT_BRANCH}}
   WRT_PATCH: ${{inputs.WRT_PATCH}}
@@ -143,12 +122,10 @@ jobs:
           export WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           export WRT_CI=$(basename $GITHUB_WORKSPACE)
           export WRT_VER=$(echo $WRT_REPO | cut -d '/' -f 5-)-$WRT_BRANCH
-          export WRT_TYPE=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/$CONFIG_FILE)
 
           echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
           echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
           echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
-          echo "WRT_TYPE=$WRT_TYPE" >> $GITHUB_ENV
 
       - name: Check Scripts
         run: |
@@ -274,14 +251,12 @@ jobs:
           body: |
             **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
             ### 📒 固件信息
-            - 这是带WIFI以及NSS且适用于EMMC的6.12内核固件
+            - 这是开启全功能NSS的6.12内核固件，默认主题为Argon
             - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
             - ⚽ 固件源码: ${{ env.REPO_URL }}
             - 💝 源码分支: ${{ env.REPO_BRANCH }}
-            - 💻 平台：${{env.WRT_TARGET}}
-            - 💻 设备：${{env.WRT_TYPE}}
-            - 🌐 默认地址: ${{env.WRT_IP}}
-            - 🔑 默认密码: ${{env.WRT_PW}}
+            - 🌐 默认地址: **192.168.10.1**
+            - 🔑 默认密码: 无
             ### 🧊 固件版本
             - 固件内核版本：${{ env.VERSION_KERNEL }}
             - 固件编译前最后一次➦[主源码](${{ env.REPO_URL }})更新记录
