@@ -1,11 +1,11 @@
 #CI项目
-name: IPQ60XX-6.12-WIFI
+name: Arthur&Athena&Taiyi-6.12-WIFI
 
 #CI计划
 on:
   #自动编译：每个星期五凌晨
   schedule:
-    - cron: 0 14 * * 5
+    - cron: 0 12 * * 5
   #推送代码编译
   push:
   workflow_dispatch:
@@ -52,12 +52,12 @@ permissions: write-all
 #CI任务
 jobs:
   config:
-    name: IPQ60XX
+    name: Arthur&Athena&Taiyi
     strategy:
       fail-fast: false
       #max-parallel: 3
       matrix:
-        TARGET: [ IPQ60XX ]
+        TARGET: [ Arthur&Athena&Taiyi ]
         SOURCE: [ LiBwrt-op/openwrt-6.x ]
         BRANCH: [ k6.12-nss ]
     #调用公用编译核心XX-CORE.yml
