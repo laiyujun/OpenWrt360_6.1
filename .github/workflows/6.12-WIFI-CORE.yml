@@ -240,11 +240,10 @@ jobs:
 
       - name: Upload Firmware To Release
         if: steps.compile.outputs.status == 'success' && env.FIRMWARE_RELEASE == 'true'
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@main
         with:
           name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
           allowUpdates: true
-          removeArtifacts: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.FIRMWARE_PATH }}/*
