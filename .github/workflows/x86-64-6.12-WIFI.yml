@@ -5,19 +5,19 @@ name: x86-64-6.12-WIFI
 on:
   #自动编译：每个星期五凌晨
   schedule:
-    - cron: 0 16 * * 5
+    - cron: 0 12 * * 5
   #推送代码编译
   push:
   workflow_dispatch:
     inputs:
       SOURCE:
-        default: 'LiBwrt-op/openwrt-6.x'
+        default: 'immortalwrt/immortalwrt'
         required: true
         type: choice
         description: 'repo source name'
         options: [ 'LiBwrt-op/openwrt-6.x', 'laipeng668/openwrt-6.x', 'laipeng668/immortalwrt', 'immortalwrt/immortalwrt' ]
       BRANCH:
-        default: 'k6.12-nss'
+        default: 'master'
         required: true
         description: 'branch name'
         type: choice

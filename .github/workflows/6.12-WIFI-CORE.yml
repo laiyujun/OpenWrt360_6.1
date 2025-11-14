@@ -134,7 +134,7 @@ jobs:
       - name: Cache Toolchain
         uses: actions/cache@main
         with:
-          key: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.HASH }} ${{ env.CACHE_DATE }}
+          key: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.HASH }}
           restore-keys: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-
           path: |
             ${{ env.OPENWRT_PATH }}/.ccache
@@ -244,6 +244,8 @@ jobs:
         with:
           name: R${{ env.DATE }} for ${{ env.FIRMWARE_TAG }}
           allowUpdates: true
+          removeArtifacts: true
+          makeLatest: true
           tag: ${{ env.FIRMWARE_TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.FIRMWARE_PATH }}/*

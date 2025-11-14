@@ -1,23 +1,23 @@
 #CI项目
-name: IPQ60XX-6.12-WIFI
+name: RAX3000M-6.12-WIFI
 
 #CI计划
 on:
   #自动编译：每个星期五凌晨
   schedule:
-    - cron: 0 16 * * 5
+    - cron: 0 14 * * 5
   #推送代码编译
   push:
   workflow_dispatch:
     inputs:
       SOURCE:
-        default: 'LiBwrt-op/openwrt-6.x'
+        default: 'immortalwrt/immortalwrt'
         required: true
         type: choice
         description: 'repo source name'
         options: [ 'LiBwrt-op/openwrt-6.x', 'laipeng668/openwrt-6.x', 'laipeng668/immortalwrt', 'immortalwrt/immortalwrt' ]
       BRANCH:
-        default: 'k6.12-nss'
+        default: 'master'
         required: true
         description: 'branch name'
         type: choice
@@ -52,14 +52,14 @@ permissions: write-all
 #CI任务
 jobs:
   config:
-    name: IPQ60XX
+    name: RAX3000M
     strategy:
       fail-fast: false
       #max-parallel: 3
       matrix:
-        TARGET: [ IPQ60XX ]
-        SOURCE: [ LiBwrt-op/openwrt-6.x ]
-        BRANCH: [ k6.12-nss ]
+        TARGET: [ RAX3000M ]
+        SOURCE: [ immortalwrt/immortalwrt ]
+        BRANCH: [ master ]
     #调用公用编译核心XX-CORE.yml
     uses: ./.github/workflows/6.12-WIFI-CORE.yml
     with:
