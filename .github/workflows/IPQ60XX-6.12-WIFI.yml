@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: 0 16 * * 5
   #推送代码编译
-  push:
+  #push:
   workflow_dispatch:
     inputs:
       SOURCE:
