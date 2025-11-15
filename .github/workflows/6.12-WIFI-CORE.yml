@@ -39,6 +39,7 @@ env:
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
   FIRMWARE_TAG: ${{inputs.WRT_TARGET}}
+  TOOLCHAIN_TAG: toolchain
   TZ: Asia/Shanghai
 
   #GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -131,23 +132,6 @@ jobs:
         run: |
           find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
 
-      - name: Cache Toolchain
-        uses: actions/cache@main
-        with:
-          key: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-${{ env.HASH }}
-          restore-keys: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}-
-          path: |
-            ${{ env.OPENWRT_PATH }}/.ccache
-            ${{ env.OPENWRT_PATH }}/staging_dir
-
-      - name: Refresh The Cache
-        run: |
-          if [ -d "$OPENWRT_PATH/staging_dir" ]; then
-            find "$OPENWRT_PATH/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
-                find "$dir" -type f -exec touch {} +
-            done
-          fi
-
       - name: Install Feeds
         run: |
           cd $OPENWRT_PATH
@@ -186,6 +170,33 @@ jobs:
           $GITHUB_WORKSPACE/scripts/init-settings.sh
           
           make defconfig
+
+      - name: Compile Toolchain
+        if: env.REBUILD_TOOLCHAIN == 'true'
+        id: toolchain
+        run: |
+          cd $OPENWRT_PATH
+          make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
+
+      - name: Delete Old Toolchain
+        if: steps.toolchain.conclusion == 'success' || env.OUTPUT_RELEASE == 'true'
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.TOOLCHAIN_TAG }}
+          assets: '${{ env.SOURCE_REPO }}-${{ env.LITE_BRANCH }}-${{ env.DEVICE_TARGET }}*'
+          fail-if-no-assets: false
+          fail-if-no-release: false
+
+      - name: Upload Toolchain To Release
+        if: steps.toolchain.conclusion == 'success' || env.OUTPUT_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: toolchain-cache
+          tag_name: ${{ env.TOOLCHAIN_TAG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: output/*
+          body: OpenWrt 工具链缓存
 
       - name: Download DL Package
         run: |
